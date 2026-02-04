@@ -1,6 +1,4 @@
-interface ImportMeta {
-  glob(
-    pattern: string,
-    options?: { eager?: boolean }
-  ): Record<string, any>;
+export interface Env {
+  DB: D1Database;
+  MY_DURABLE_OBJECT: DurableObjectNamespace;
 }

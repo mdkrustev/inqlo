@@ -2,27 +2,24 @@ export type Route = {
   method: string;
   path: string;
   handler: (
-    request: Request,
+    req: Request,
     env: Env,
     ctx: ExecutionContext
   ) => Promise<Response> | Response;
 };
 
-
 export function createRouter(routes: Route[]) {
   return async function router(
-    request: Request,
+    req: Request,
     env: Env,
     ctx: ExecutionContext
-  ): Promise<Response> {
-    const url = new URL(request.url);
+  ) {
+    const url = new URL(req.url);
 
     for (const route of routes) {
-      if (
-        route.method === request.method &&
-        route.path === url.pathname
-      ) {
-        return route.handler(request, env, ctx);
+      console.log(`Checking route: ${route.method} ${route.path}`);
+      if (route.method === req.method && route.path === url.pathname) {
+        return route.handler(req, env, ctx);
       }
     }
 

@@ -1,70 +1,26 @@
-import { DurableObject } from "cloudflare:workers";
 import { createRouter } from "./lib/router";
+import { routes } from "./routes";
+import { MyDurableObject } from "./durable/my-do";
 
-/* =========================
-   Durable Object
-========================= */
+let router: ReturnType<typeof createRouter> | null = null;
 
-export class MyDurableObject extends DurableObject<Env> {
-  constructor(state: DurableObjectState, env: Env) {
-    super(state, env);
-  }
-
-  async sayHello(name: string): Promise<string> {
-    return `Hello, ${name}!`;
-  }
+function getRouter() {
+  if (!router) router = createRouter(routes);
+  return router;
 }
-
-/* =========================
-   Routing (lazy)
-========================= */
-
-type RouteModule = {
-  method: string;
-  path: string;
-  default: (
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext
-  ) => Promise<Response> | Response;
-};
-
-type RouterFn = (
-  request: Request,
-  env: Env,
-  ctx: ExecutionContext
-) => Promise<Response>;
-
-let _router: RouterFn | null = null;
-
-function getRouter(): RouterFn {
-  if (_router) return _router;
-
-  const modules = import.meta.glob("./routes/**/*.ts", {
-    eager: true,
-  }) as Record<string, RouteModule>;
-
-  const routes = Object.values(modules).map((mod) => ({
-    method: mod.method,
-    path: mod.path,
-    handler: mod.default,
-  }));
-
-  _router = createRouter(routes);
-  return _router;
-}
-
-/* =========================
-   Worker entry
-========================= */
 
 export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext
-  ): Promise<Response> {
-    const router = getRouter();
-    return router(request, env, ctx);
+  async fetch(req: Request, env: Env, ctx: ExecutionContext) {
+ //   return  //const { results } = await env.DB
+    //.prepare("SELECT * FROM users")
+    //.all();
+
+    const results = [
+      { id: 1, name: "Alice" },
+      { id: 2, name: "Bob" },
+    ];
+    return Response.json(results);
   },
-} satisfies ExportedHandler<Env>;
+};
+
+export { MyDurableObject };
