@@ -1,19 +1,18 @@
-import { Env } from "../../env";
+import { BaseRoute, RouteConfig } from "../../lib/router";
 
-export const method = "GET";
-export const path = "/identity/users";
 
-export default async function handler(
-  req: Request,
-  env: Env
-) {
-  //const { results } = await env.DB
-    //.prepare("SELECT * FROM users")
-    //.all();
+export class UsersRoute extends BaseRoute {
+  
+  config: RouteConfig = {
+    path: "/identity/users",
+    method: "GET"
+  }
 
+  async handler(req: Request, env: Env, ctx: ExecutionContext) {
     const results = [
       { id: 1, name: "Alice" },
       { id: 2, name: "Bob" },
     ];
-  return Response.json(results);
+    return Response.json(results);
+  }
 }
