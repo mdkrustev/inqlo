@@ -1,8 +1,16 @@
 {
   "name": "server",
   "main": "src/index.ts",
-  "compatibility_date": "2026-01-31",
-
+  "compatibility_date": "2026-01-31",// задължително за ESM
+  "d1_databases": [{
+      "binding": "DB",
+      "database_name": "inqlo_db",
+      "database_id": "bfe80e81-457f-4027-87c5-6c9979660a57"
+  }],
+  "migrations": [
+    // тук може да добавяш SQL миграции, но за локален dev
+    // ще ги пускаш с npx wrangler d1 execute
+  ],
   "durable_objects": {
     "bindings": [
       {
@@ -10,20 +18,5 @@
         "class_name": "MyDurableObject"
       }
     ]
-  },
-
-  "migrations": [
-    {
-      "tag": "v1",
-      "new_sqlite_classes": ["MyDurableObject"]
-    }
-  ],
-
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "app-db",
-      "database_id": "<PUT_ID_HERE>"
-    }
-  ]
+  }
 }

@@ -1,0 +1,8 @@
+new migration:
+wrangler d1 migrations create DB init_schema
+
+update database:
+wrangler d1 migrations apply DB --remote
+
+
+npx wrangler dev --remote
